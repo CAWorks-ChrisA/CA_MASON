@@ -25,6 +25,10 @@ Eclipse and some older version of Java (above 8) should still work with these co
 
 ## How to use:
 
+- To download the project, on this page, code -> download ZIP
+
+- unzip both MASON and MASONplus9 to your favorite location
+
 - Create a java project, and configure the classpath to use MASON and MASON+9
 
-- [An empty project repository with instructions for Visual Studio Code.](https://github.com/CAWorks-ChrisA/MASONplus9TemplateProject)
+[A template project repository with instructions for Visual Studio Code.](https://github.com/CAWorks-ChrisA/MASONplus9TemplateProject)
