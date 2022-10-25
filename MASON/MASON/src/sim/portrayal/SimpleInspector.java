@@ -13,6 +13,9 @@ import sim.util.*;
 import sim.display.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Vector;
 
 /**
    A simple inspector class that looks at the "getX" and "setX" method of the object to be investigates
@@ -204,7 +207,6 @@ public class SimpleInspector extends Inspector
         if (propertyList != null) 
             remove(propertyList);
         propertyList = new LabelledList(listName);
-
         if (len > maxProperties)
             {
             final String s = "Page forward/back through properties.  " + maxProperties + " properties shown at a time.";
@@ -245,30 +247,85 @@ public class SimpleInspector extends Inspector
         int end = start + maxProperties;
         if (end > len) end = len;
         count = end - start;
-        for( int i = start ; i < end; i++ )
-            {
-            if (!properties.isHidden(i))  // don't show if the user asked that it be hidden
-                {
-                JLabel label = new JLabel(properties.getName(i) + " ");
-                JToggleButton toggle = PropertyInspector.getPopupMenu(properties,i,state, makePreliminaryPopup(i));
-                members[i] = makePropertyField(i);
+
+        //hack: sort the names.
+        Vector<String> v = new Vector<String>();
+        Vector<JLabel> labels = new Vector<JLabel>();
+        Vector<JToggleButton> toggles = new Vector<JToggleButton>();
+        Vector<Boolean> isHiddens = new Vector<Boolean>();
+        Vector<PropertyField> membersList = new Vector<PropertyField>();
+        Vector<String> descriptions = new Vector<String>();
+        //step 1: loop through it once, store (buffer) everything
+        for( int i = start ; i < end; i++ ){
+            //System.out.println(properties.getName(i));
+            v.add(properties.getName(i));
+            labels.add(new JLabel(properties.getName(i) + " "));
+            toggles.add(PropertyInspector.getPopupMenu(properties,i,state, makePreliminaryPopup(i)));
+            isHiddens.add(properties.isHidden(i));
+            membersList.add(makePropertyField(i));
+            descriptions.add(properties.getDescription(i));
+        }
+        //list construction
+        //System.out.println(v); //before
+        Vector<String> vPreSort = new Vector<String>(v); //stores the before with a copy constructor
+        Collections.sort(v,String.CASE_INSENSITIVE_ORDER); //sort
+        //debug: check sorted lists.
+        //System.out.println(v);
+        //System.out.println(vPreSort);
+
+        //step 2: go through the normal loop with the sorted index reference, restore the values
+        //and then feed the data back as expected.
+        for( int i = start ; i < end; i++ ){
+            String curName = v.get(i);
+            //System.out.println(i+", "+curName); //debug: print current loop number and item
+            int curIndex = vPreSort.indexOf(curName);
+            //System.out.println("at "+curIndex); //debug: print the target index at the buffer.
+            if(!isHiddens.get(curIndex)){
+                JLabel label = labels.get(curIndex);
+                JToggleButton toggle = toggles.get(curIndex);
+                members[i] = membersList.get(curIndex);
                 propertyList.add(null,
                     label, 
                     toggle, 
                     members[i], 
-                    null);
-                
+                    null);                
                 // load tooltips
-                String description = properties.getDescription(i);
+                String description = descriptions.get(curIndex);
                 if (description != null)
                     {
                     if (label != null) label.setToolTipText(description);
                     if (toggle != null) toggle.setToolTipText(description);    // do we want this one?
                     if (members[i] != null) members[i].setToolTipText(description);  // do we want this one?
                     }
-                }
-            else members[i] = null;
             }
+            else members[i] = null; 
+        }
+        // original code:
+        // for( int i = start ; i < end; i++ )
+        //     {
+        //     if (!properties.isHidden(i))  // don't show if the user asked that it be hidden
+        //         {
+        //         JLabel label = new JLabel(properties.getName(i) + " ");
+        //         JToggleButton toggle = PropertyInspector.getPopupMenu(properties,i,state, makePreliminaryPopup(i));
+        //         members[i] = makePropertyField(i);
+        //         propertyList.add(null,
+        //             label, 
+        //             toggle, 
+        //             members[i], 
+        //             null);
+                
+        //         // load tooltips
+        //         String description = properties.getDescription(i);
+        //         if (description != null)
+        //             {
+        //             if (label != null) label.setToolTipText(description);
+        //             if (toggle != null) toggle.setToolTipText(description);    // do we want this one?
+        //             if (members[i] != null) members[i].setToolTipText(description);  // do we want this one?
+        //             }
+        //         }
+        //     else members[i] = null;
+        //     }
+        //end hack
         add(propertyList, BorderLayout.CENTER);
         this.start = start;
         revalidate();
