@@ -1,4 +1,6 @@
-# MASONplus9Package_CAWorks
+# MASONplus9Bundle_CAWorks
+
+A java-based Agent-Based Modeling Toolkit
 
 ## Description:
 
@@ -16,7 +18,7 @@ MASON+9 belongs to Prof. Jeff Schank, UC Davis Department of Psychology.
 
 ## System that this was tested on:
 
-- Visual Studio Code
+- Visual Studio Code - Java Extension Pack
 - Java Development Kit 17
 
 Eclipse and some older version of Java (above 8) should still work with these codes.
@@ -25,4 +27,4 @@ Eclipse and some older version of Java (above 8) should still work with these co
 
 - Create a java project, and configure the classpath to use MASON and MASON+9
 
-- WIP - An empty project repository with instructions for Visual Studio Code
+- [An empty project repository with instructions for Visual Studio Code.](https://github.com/CAWorks-ChrisA/MASONplus9TemplateProject)
