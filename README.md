@@ -1,4 +1,4 @@
-# MASONplus9Bundle_CAWorks
+# MASONplus9Bundle
 
 A java-based Agent-Based Modeling Toolkit
 
