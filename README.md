@@ -10,6 +10,7 @@ MASON belongs to George Mason University:
 https://cs.gmu.edu/~eclab/projects/mason/
 
 MASON+9 belongs to Prof. Jeff Schank, UC Davis Department of Psychology.
+https://psychology.ucdavis.edu/people/jcschank
 
 ## Modifications
 
